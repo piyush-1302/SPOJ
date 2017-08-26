@@ -25,29 +25,44 @@ using namespace std;
 #define mod 1000000007
 #define pii pair<ll,ll>
 const int N=100007;
-ll dp[250][250],diff[250];
-ll rec(ll start, ll n)
-{
-    if(start>=n)
-        retrun 0;
-    if(dp[start][current])
-}
 int main()
 {
     ios_base::sync_with_stdio(false);
-    ll n,ans,t,a,b;
+    ll t;
     cin>>t;
     while(t--)
     {
+        ll n,x,y,diff[N],ans=INT_MAX,sum=0;
+        bool dp[207][50007];
         cin>>n;
         fr(i,0,n)
         {
-            cin>>a>>b;
-            diff[i]=abs(a-b);
+            cin>>x>>y;
+            diff[i]=abs(x-y);
+            sum+=diff[i];
         }
-        ans=rec(0,n);
+        sort(diff,diff+n);
+        fr(i,0,sum+1)
+            dp[0][i]=false;
+        fr(i,0,n+1)
+            dp[i][0]=true;
+        fr(i,1,n+1)
+        {
+            fr(j,1,sum+1)
+            {
+                if(diff[i-1]>j)
+                    dp[i][j]=dp[i-1][j];
+                else
+                    dp[i][j]=dp[i-1][j-diff[i-1]] || dp[i-1][j];
+            }
+        }
+        fr(i,0,sum+1)
+        {
+           //cout<<dp[n][i]<<"\t";
+            if(dp[n][i]==true)
+                ans=min(ans,abs(sum-2*i));
+        }
         cout<<ans<<"\n";
     }
     return 0;
 }
-
